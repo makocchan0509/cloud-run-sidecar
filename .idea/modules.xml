@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/cloud-run-sidecar.iml" filepath="$PROJECT_DIR$/.idea/cloud-run-sidecar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../projects/gameday/.idea/gameday.iml" filepath="$PROJECT_DIR$/../projects/gameday/.idea/gameday.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../my-activity/.idea/my-activity.iml" filepath="$PROJECT_DIR$/../my-activity/.idea/my-activity.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,48 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: demo-sidecar-app
+  labels:
+    cloud.googleapis.com/location: asia-northeast1
+  annotations:
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 30
+      containers:
+        - image: asia-northeast1-docker.pkg.dev/${YOUR_PROJECT_ID}/${YOUR_ARTIFACT_REGISTRY}/demo-sidecar-app:v0.0.1
+          ports:
+              containerPort: 8080
+          env:
+            - name: APP_NAME
+              value: 'proxy'
+            - name: APP_PORT
+              value: '8080'
+            - name: BKE_HOST
+              value: 'localhost'
+            - name: BKE_PORT
+              value: '8090'
+            - name: BKE_PATH
+              value: 'backend'
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+        - image: asia-northeast1-docker.pkg.dev/${YOUR_PROJECT_ID}/${YOUR_ARTIFACT_REGISTRY}/demo-sidecar-app:v0.0.1
+          env:
+            - name: APP_NAME
+              value: 'backend'
+            - name: APP_PORT
+              value: '8090'
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+  traffic:
+    - percent: 100
+      latestRevision: true
