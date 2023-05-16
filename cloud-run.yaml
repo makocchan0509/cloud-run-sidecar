@@ -11,13 +11,19 @@ spec:
     metadata:
       annotations:
         run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/container-dependencies: "{proxy-app:[backend-app]}"
     spec:
       containerConcurrency: 80
       timeoutSeconds: 30
       containers:
-        - image: asia-northeast1-docker.pkg.dev/${YOUR_PROJECT_ID}/${YOUR_ARTIFACT_REGISTRY}/demo-sidecar-app:v0.0.1
+        - image: asia-northeast1-docker.pkg.dev/ca-masem-test/any-container/demo-sidecar-app:v0.0.1
+          name: proxy-app
           ports:
               containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
           env:
             - name: APP_NAME
               value: 'proxy'
@@ -33,7 +39,12 @@ spec:
             limits:
               cpu: 1000m
               memory: 256Mi
-        - image: asia-northeast1-docker.pkg.dev/${YOUR_PROJECT_ID}/${YOUR_ARTIFACT_REGISTRY}/demo-sidecar-app:v0.0.1
+        - image: asia-northeast1-docker.pkg.dev/ca-masem-test/any-container/demo-sidecar-app:v0.0.1
+          name: backend-app
+          startupProbe:
+            httpGet:
+              path: /backend
+              port: 8090
           env:
             - name: APP_NAME
               value: 'backend'
